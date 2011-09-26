@@ -56,11 +56,15 @@
 <body>
   <h1>{{name}}</h1>
   
-  <span class="chiffre">{% block bikes %}{% endblock %}</span>
-  vélos<br />
-  
-  <span class="chiffre">{% block free_attachs %}{% endblock %}</span>
-  ancrages<br />
+  <div style="display:block; margin:0 auto; width:14em;">
+   	<div style="float:left; display:block; width:7em;">
+   		<span class="chiffre">{% block bikes %}{% endblock %}</span>vélos<br>
+   	</div>
+   	<div style="float:left; display:block; width:7em;">
+   		<span class="chiffre">{% block free_attachs %}{% endblock %}</span>bornettes<br>
+   	</div>
+   	<br style="clear:both;"/>
+   </div>
   
   <div class="retour"><a href="/">autres stations</a></div>
 </body>

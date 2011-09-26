@@ -36,7 +36,7 @@ MIN_BIKES = 1
 MIN_FREE_ATTACHS = 1
 
 TIMEOUT_LONG = 21600
-
+TIMEOUT_STATION = 20
 
 class StationData(db.Model):
     id_vlille = db.IntegerProperty(required=True)
@@ -68,7 +68,7 @@ class StationHandler(webapp.RequestHandler):
             station = Station(id=station_id)
             station.name = station_data.name
             station.refresh()
-            memcache.set("station-" + station_id, station, time=20)
+            memcache.set("station-" + station_id, station, time=TIMEOUT_STATION)
         
         return station
 
@@ -107,8 +107,13 @@ class IndexHandler(webapp.RequestHandler):
         stations = memcache.get("stations")
         
         if stations == None:
+            logging.info("- rebuild liste des stations")
             stations = StationData.all()
-            memcache.set("stations", stations, time=TIMEOUT_LONG)
+            stations_light = []
+            for station in stations:
+                stations_light.append({ 'id_vlille': station.id_vlille, 'name': station.name })
+            
+            memcache.set("stations", stations_light, time=TIMEOUT_LONG)
         
         return self._template( { 'stations': stations }, "index_stations.html" )
 
@@ -130,7 +135,7 @@ class RefreshHandler(webapp.RequestHandler):
 
 
 def main():
-    application = webapp.WSGIApplication([('/', IndexHandler),
+    application = webapp.WSGIApplication([('^/index', IndexHandler),
                                           ('^/station/refresh', RefreshHandler),
                                           ('^/station/\d+$', StationHandler)],
                                          debug=True)
