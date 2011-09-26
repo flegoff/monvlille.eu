@@ -1,0 +1,16 @@
+<html>
+
+<head>
+  <title>Liste des stations</title>
+</head>
+
+<body>
+  
+  <ul>
+  {% for station in stations %}
+    <li><a href="/station/{{station.id_vlille}}">{{station.name}}</li>
+  {% endfor %}
+  </ul>
+</body>
+
+</html>

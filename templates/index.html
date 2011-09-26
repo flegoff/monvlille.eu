@@ -1,0 +1,29 @@
+<head>
+  <title>{% block name %}{% endblock %}</title>
+  <style type="text/css">
+  body {
+    {% block theme %}{% endblock %}
+    width: 80%;
+    font-size: 1.5em;
+    text-align: center;
+    margin: 0 auto;
+    padding-top: 10%;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  .chiffre {
+    font-size: 2em;
+    font-weight: bold;
+    display: block;
+    padding: 0.5em;
+  }
+  </style>
+</head>
+
+<body>
+  {{name}}
+  <span class="chiffre">{% block bikes %}{% endblock %}</span> vélos<br />
+  <span class="chiffre">{% block free_attachs %}{% endblock %}</span> ancrages
+</body>
+
+</html>
