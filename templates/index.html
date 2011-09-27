@@ -1,72 +1,24 @@
 <head>
   <title>{% block name %}{% endblock %}</title>
-  <style type="text/css">
-  body {
-    {% block theme %}{% endblock %}
-    width: 80%;
-    font-size: 1.5em;
-    text-align: center;
-    margin: 0 auto;
-    padding-top: 1em;
-    font-family: Arial, Helvetica, sans-serif;
-  }
-  
-  h1 {
-    font-size: 1.5em;
-    margin: 0.5em;
-  }
-  
-  .retour { padding-top: 2em; }
-  
-  .chiffre {
-    font-size: 2em;
-    font-weight: bold;
-    display: block;
-    padding: 0.5em;
-  }
-  
-   a, a:link, a:visited {
-   	text-decoration: none;
-   	color: #000;
-   	padding: .6em .8em;
-   	background-color: #ccc;
-   	width: 20em;
-   	height: 1.2em;
-   	border-radius: .375em;
-   	-moz-border-radius: .375em; /* FF1-3.6 */
-   	-webkit-border-radius: .375em; /* Saf3-4, iOS 1-3.2, Android <1.6 */
-   	border-radius: .375em; /* Opera 10.5, IE9, Saf5, Chrome, FF4, iOS 4, Android 2.1+ */
-   	-moz-background-clip: padding;
-   	-webkit-background-clip: padding-box;
-   	background-clip: padding-box;
-   }
-
-    a:hover {
-   	background-color: #333;
-   	color: #fff;
-   	}
-
-    a:active {
-   	background-color: #000;
-   	color: #fff;
-   	}
-  </style>
+  <link rel="stylesheet" type="text/css" href="/static/style.css" />
 </head>
 
-<body>
-  <h1>{{name}}</h1>
+<body class="{{type_page}}">
+  <h1>{{station.name}}</h1>
   
-  <div style="display:block; margin:0 auto; width:14em;">
-   	<div style="float:left; display:block; width:7em;">
-   		<span class="chiffre">{% block bikes %}{% endblock %}</span>vélos<br>
+  <div class="result">
+   	<div class="colonne">
+   		<span class="chiffre">{{station.bikes}}</span>vélos<br>
    	</div>
-   	<div style="float:left; display:block; width:7em;">
-   		<span class="chiffre">{% block free_attachs %}{% endblock %}</span>bornettes<br>
+   	<div class="colonne">
+   		<span class="chiffre">{{station.free_attachs}}</span>bornettes<br>
    	</div>
-   	<br style="clear:both;"/>
+   	<br style="clear: both;"/>
    </div>
   
-  <div class="retour"><a href="/">autres stations</a></div>
+  <ul class="retour">
+    <li><a href="/">autres stations</a></li>
+  </ul>
 </body>
 
 </html>

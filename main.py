@@ -27,8 +27,10 @@ from google.appengine.ext.webapp import util, template
 from google.appengine.api import memcache
 
 import re
+import logging
 
 from vlille.station import Station
+from models import StationData
 
 MIN_WARN_BIKES = 2
 MIN_WARN_FREE_ATTACHS = 2
@@ -38,11 +40,6 @@ MIN_FREE_ATTACHS = 1
 TIMEOUT_LONG = 21600
 TIMEOUT_STATION = 20
 
-class StationData(db.Model):
-    id_vlille = db.IntegerProperty(required=True)
-    name = db.StringProperty(required=True)
-
-import logging
 
 class StationHandler(webapp.RequestHandler):
     def __init__(self):
@@ -73,11 +70,13 @@ class StationHandler(webapp.RequestHandler):
         return station
 
 
-    def _template(self, station, template_file):
-        path = os.path.join(os.path.dirname(__file__), 'templates', template_file)
+    def _template(self, station, type_page):
+        path = os.path.join(os.path.dirname(__file__), 'templates', 'index.html')
 
         if not station is None:
-            self.response.out.write(template.render(path, station.to_dict()))
+            self.response.out.write(template.render(path, { 'type_page': type_page,
+                                                            'station': station.to_dict()
+                                                          }))
         else:
             self.response.out.write(template.render(path, {}))
 
@@ -90,12 +89,13 @@ class StationHandler(webapp.RequestHandler):
             return self._template(None, "blank.html")
 
         if station.bikes >= MIN_WARN_BIKES and station.free_attachs >= MIN_WARN_FREE_ATTACHS:
-            return self._template(station, "ok.html")
+            return self._template(station, "ok")
 
         if station.bikes >= MIN_BIKES and station.free_attachs >= MIN_FREE_ATTACHS:
-            return self._template(station, "warning.html")
+            return self._template(station, "warning")
 
-        return self._template(station, "ko.html")
+        return self._template(station, "ko")
+
 
 
 class IndexHandler(webapp.RequestHandler):
@@ -134,6 +134,7 @@ class RefreshHandler(webapp.RequestHandler):
         return "stations : %i" % len(vlillef.stations)
 
 
+
 def main():
     application = webapp.WSGIApplication([('^/index', IndexHandler),
                                           ('^/station/refresh', RefreshHandler),
@@ -144,4 +145,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
