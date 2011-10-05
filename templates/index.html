@@ -1,5 +1,5 @@
 <head>
-  <title>{% block name %}{% endblock %}</title>
+  <title>MonVlille : {% block name %}{{station.name}}{% endblock %}</title>
   <link rel="stylesheet" type="text/css" href="/static/style.css" />
   <meta name="viewport" content="width=device-width; initial-scale=1.0">
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -21,7 +21,7 @@
   
   <ul class="retour">
     <li><a href="/">autres stations</a></li>
-    <li><span style="font-size: 0.6em">ajoutez cette page à vos bookmarks pour surveiller cette station.</span></li>
+    <li class="tip">Ajoutez cette page à vos favoris pour consulter cette station en un clin d'oeil.</li>
   </ul>
   
   <script type="text/javascript">
@@ -39,7 +39,9 @@
 
   </script>
   
+  <div id="footer">
   {% include 'footer.html' %}
+  </div>
   
 </body>
 

@@ -1,4 +1,4 @@
-/* MONVLILLE.EU V1.2 */
+/* MONVLILLE.EU V1.3 */
 
 html {
 	font-family: "Lucida Grande", Lucida, Verdana, sans-serif;
@@ -14,14 +14,20 @@ body {
 	
 h1 {
     text-align: center;
-    padding: 10px;
     margin: .5em;
-    font-size: 1.5em;
+    font-size: 2.5em;
     color: #c00;
 	}
 
 /* INDEX DES STATIONS */
 
+.t1 {color: #000}
+.t2 {color: #c00}
+
+.descriptif {
+	font-size: 1em;
+	}
+	
 ul {
   	margin: 2em auto;
   	padding: 0;
@@ -118,21 +124,32 @@ body.warning {
 .retour a:active {
   	background-color: #000;
    	}
-   	
+
+.tip {
+	font-size: .8em;
+	font-style: italic;
+	color: #333;
+	}
+
 #footer {
 	text-align: center;
 	text-indent: .5em;
 	font-size: .6em;
 	color: #666;
 	padding: .2em 0 .3em;
+	margin-bottom: .5em;
 	}
 	
 #footer a, #footer a:link, #footer a:visited {
-	color: #333;
+	color: #c00;
 	text-decoration: none;
 	}
 	
-#footer a:hover, #footer a:active {
+.ok #footer a, .ok #footer a:link, .ok #footer a:visited,
+.ko #footer a, .ko #footer a:link, .ko #footer a:visited,
+.warning #footer a, .warning #footer a:link, .warning #footer a:visited {color: #fff;}
+
+#footer a:hover, #footer a:active, .ok #footer a:hover, .ko #footer a:active, .ko #footer a:hover, .ko #footer a:active, .warning #footer a:hover, .warning #footer a:active {
 	color: #000;
 	text-decoration: none;
 	}
@@ -141,13 +158,23 @@ body.warning {
 	margin: 0;
 	clear: both;
 	}
-	
+
+.ok #footer, .ko #footer, .warning #footer {
+	margin-top: 4em;
+	color: #333;
+	font-size: .5em;
+	}
+
+
 @media (max-device-width: 320px), (max-width: 480px), (-webkit-min-device-pixel-ratio: 2) {
 	html {-webkit-text-size-adjust: none;}
 	body {padding-top: 0; font-size: 1.5em;}
+	h1 {font-size: 2em;}
 	.retour {padding: 0; margin-top: 2em;}
 	li a, li a:link, li a:visited {margin: 0 auto; padding: .6em 0; width: 95%;}
 	#index {margin: 0}
 	li {margin: .6em 0}
-	#footer {font-size: .5em; width: 80%; margin: 0 auto;}
+	.tip {width:90%; margin: 0 auto; font-size: .7em}
+	.descriptif {font-size: .6em; width: 85%; margin: 0 auto;}
+	#footer {font-size: .4em; width: 85%; margin: 0 auto; padding: 1em;}
 	}

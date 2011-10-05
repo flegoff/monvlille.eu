@@ -1,7 +1,7 @@
 <html>
 
 <head>
-  <title>Liste des stations</title>
+  <title>MonVlille : toutes les stations</title>
   <link rel="stylesheet" type="text/css" href="/static/style.css" />
   <meta name="viewport" content="width=device-width; initial-scale=1.0">
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -9,9 +9,8 @@
 
 <body>
   
-  <h1>Mon V'Lille ?</h1>
-  
-  Cliquez sur une page, insérez là dans vos favoris et c'est parti !
+  <h1><span class="t1">mon</span><span class="t2">vlille</span><span class="t1">.eu</span></h1>
+  <p class="descriptif">Cliquez sur une borne, ajoutez-là à vos favoris, et consultez-là en un clin d'oeil !</p>
     
   <ul id="index">
   {% for station in stations %}
@@ -34,7 +33,11 @@
 
   </script>
 
-  {% include 'footer.html' %}
+  <div id="footer">
+    {% include 'footer.html' %}
+ 	  <p>Monvlille.eu se base sur le projet <a href="https://github.com/glibersat/python-vlille">python-vlille</a>.</p>
+ 	  <p><em>V'lille</em> est une marque déposée par les Transports en Commun de la Métropole Lilloise.</p>
+  </div>
 
 </body>
 
