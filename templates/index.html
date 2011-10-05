@@ -1,16 +1,19 @@
 <head>
   <title>{% block name %}{% endblock %}</title>
   <link rel="stylesheet" type="text/css" href="/static/style.css" />
+  <meta name="viewport" content="width=device-width; initial-scale=1.0">
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 </head>
 
 <body class="{{type_page}}">
   <h1>{{station.name}}</h1>
   
   <div class="result">
-   	<div class="colonne">
+  
+   	<div class="colonne gauche">
    		<span class="chiffre">{{station.bikes}}</span>vélos<br>
    	</div>
-   	<div class="colonne">
+   	<div class="colonne droite">
    		<span class="chiffre">{{station.free_attachs}}</span>bornettes<br>
    	</div>
    	<br style="clear: both;"/>
@@ -18,7 +21,26 @@
   
   <ul class="retour">
     <li><a href="/">autres stations</a></li>
+    <li><span style="font-size: 0.6em">ajoutez cette page à vos bookmarks pour surveiller cette station.</span></li>
   </ul>
+  
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-25972865-1']);
+    _gaq.push(['_setDomainName', 'monvlille.eu']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+  
+  {% include 'footer.html' %}
+  
 </body>
 
 </html>
