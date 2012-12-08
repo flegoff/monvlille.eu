@@ -16,9 +16,9 @@ You will have to use Guillaume Libersat's vlille python module.
 
 ## Authors
 
-Florian Le Goff - http://www.poxx.net - code
-Samuel Lemaresquier - http://www.samlem.com - gui
-Nicolas Wojcik - testing and feedback
+- Florian Le Goff - http://www.poxx.net - code
+- Samuel Lemaresquier - http://www.samlem.com - gui
+- Nicolas Wojcik - testing and feedback
 
 ## Licence
 
