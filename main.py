@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 #
-# Copyright 2007 Google Inc.
+# Copyright 2011 Florian Le Goff & Samuel Lemaresquier
+# Some parts : Copyright 2010 Google Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,13 +18,9 @@
 
 import os
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-
-from google.appengine.dist import use_library
-use_library('django', '1.2')
-
-from google.appengine.ext import webapp, db
-from google.appengine.ext.webapp import util, template
+import webapp2
+from google.appengine.ext import db
+from google.appengine.ext.webapp import template
 from google.appengine.api import memcache
 
 import re
@@ -41,10 +38,10 @@ TIMEOUT_LONG = 21600
 TIMEOUT_STATION = 20
 
 
-class StationHandler(webapp.RequestHandler):
-    def __init__(self):
+class StationHandler(webapp2.RequestHandler):
+    def __init__(self, *args, **kwargs):
+        super(StationHandler, self).__init__(*args, **kwargs)
         self.reg = re.compile('^/station/(\d+)')
-
 
     def _match_station(self):
         m = self.reg.match(self.request.path)
@@ -57,29 +54,30 @@ class StationHandler(webapp.RequestHandler):
 
         if station is None:
             station_data = memcache.get("station-db-" + station_id)
-            
+
             if station_data is None:
                 station_data = StationData.get_by_key_name(station_id)
                 memcache.set("station-db-" + station_id, station_data, time=TIMEOUT_LONG)
-            
+
             station = Station(id=station_id)
+            if station_data is None:
+                logging.error("oh noes - station_id {0} is None !".format(station_id))
+                return None
             station.name = station_data.name
             station.refresh()
             memcache.set("station-" + station_id, station, time=TIMEOUT_STATION)
-        
-        return station
 
+        return station
 
     def _template(self, station, type_page):
         path = os.path.join(os.path.dirname(__file__), 'templates', 'index.html')
 
         if not station is None:
-            self.response.out.write(template.render(path, { 'type_page': type_page,
-                                                            'station': station.to_dict()
-                                                          }))
+            self.response.out.write(template.render(path, {'type_page': type_page,
+                                                           'station': station.to_dict()
+                                                           }))
         else:
             self.response.out.write(template.render(path, {}))
-
 
     def get(self):
         station = self._match_station()
@@ -97,51 +95,47 @@ class StationHandler(webapp.RequestHandler):
         return self._template(station, "ko")
 
 
-
-class IndexHandler(webapp.RequestHandler):
+class IndexHandler(webapp2.RequestHandler):
     def _template(self, values, template_file):
-        path = os.path.join(os.path.dirname(__file__), 'templates', template_file)
+        path = os.path.join(os.path.dirname(__file__), 'static', template_file)
         self.response.out.write(template.render(path, values))
-    
+
     def get(self):
         stations = memcache.get("stations")
-        
-        if stations == None:
+
+        if stations is None:
             logging.info("- rebuild liste des stations")
             stations = StationData.all()
             stations_light = []
             for station in stations:
-                stations_light.append({ 'id_vlille': station.id_vlille, 'name': station.name })
-            
+                stations_light.append({'id_vlille': station.id_vlille, 'name': station.name})
+
             memcache.set("stations", stations_light, time=TIMEOUT_LONG)
-        
-        return self._template( { 'stations': stations }, "index_stations.html" )
+
+        return self._template({'stations': stations}, "index_stations.html")
 
 
 from vlille.system import Vlille
 
-class RefreshHandler(webapp.RequestHandler):
+
+class RefreshHandler(webapp2.RequestHandler):
     def get(self):
         vlillef = Vlille()
         vlillef.load_stations()
-        
+
         stations = []
         for station in vlillef.stations:
-            stations.append(StationData(key_name=str(station.id), id_vlille=station.id, name=station.name))
-        
+            stations.append(StationData(key_name=str(station.id),
+                                        id_vlille=station.id,
+                                        name=station.name))
+
         db.delete(StationData.all())
         db.put(stations)
-        return "stations : %i" % len(vlillef.stations)
+
+        self.response.out.write("stations : %i" % len(vlillef.stations))
 
 
-
-def main():
-    application = webapp.WSGIApplication([('^/index', IndexHandler),
-                                          ('^/station/refresh', RefreshHandler),
-                                          ('^/station/\d+$', StationHandler)],
-                                         debug=True)
-    util.run_wsgi_app(application)
-
-
-if __name__ == '__main__':
-    main()
+app = webapp2.WSGIApplication([('^/index', IndexHandler),
+                               ('^/station/refresh', RefreshHandler),
+                               ('^/station/\d+$', StationHandler)],
+                               debug=True)

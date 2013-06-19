@@ -1,16 +1,16 @@
 application: unvlille
 version: 1
-runtime: python
+runtime: python27
+threadsafe: true
 api_version: 1
 
 handlers:
-  
 - url: /
-  static_files: static/index.html
+  static_files: static/index_stations.html
   upload: static/(.*)
 
 - url: /static
   static_dir: static
 
 - url: .*
-  script: main.py
+  script: main.app
